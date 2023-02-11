@@ -310,7 +310,7 @@ msgstr ""
 #. module: website_profile
 #: model_terms:ir.ui.view,arch_db:website_profile.email_validation_banner
 msgid "Close"
-msgstr ""
+msgstr "അടയ്ക്കുക"
 
 #. module: website_profile
 #: model_terms:ir.ui.view,arch_db:website_profile.user_profile_edit_content
@@ -427,7 +427,7 @@ msgstr ""
 #. module: website_profile
 #: model_terms:ir.ui.view,arch_db:website_profile.user_profile_sub_nav
 msgid "Search"
-msgstr ""
+msgstr "സെർച്ച് "
 
 #. module: website_profile
 #: model_terms:ir.ui.view,arch_db:website_profile.user_profile_sub_nav
@@ -478,7 +478,7 @@ msgstr ""
 #. module: website_profile
 #: model:ir.model,name:website_profile.model_res_users
 msgid "User"
-msgstr "ഉപയോക്താവ്"
+msgstr ""
 
 #. module: website_profile
 #: model_terms:ir.ui.view,arch_db:website_profile.top3_user_card

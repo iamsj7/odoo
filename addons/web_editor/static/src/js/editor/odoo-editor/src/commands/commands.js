@@ -189,12 +189,12 @@ export const editorCommands = {
             container.replaceChildren(...p.childNodes);
         } else if (container.childElementCount > 1) {
             // Grab the content of the first child block and isolate it.
-            if (isBlock(container.firstChild) && container.firstChild.nodeName !== 'TABLE') {
+            if (isBlock(container.firstChild) && !['TABLE', 'UL', 'OL'].includes(container.firstChild.nodeName)) {
                 containerFirstChild.replaceChildren(...container.firstElementChild.childNodes);
                 container.firstElementChild.remove();
             }
             // Grab the content of the last child block and isolate it.
-            if (isBlock(container.lastChild) && container.lastChild.nodeName !== 'TABLE') {
+            if (isBlock(container.lastChild) && !['TABLE', 'UL', 'OL'].includes(container.lastChild.nodeName)) {
                 containerLastChild.replaceChildren(...container.lastElementChild.childNodes);
                 container.lastElementChild.remove();
             }
@@ -425,12 +425,15 @@ export const editorCommands = {
     },
     unlink: editor => {
         const sel = editor.document.getSelection();
-        // we need to remove the contentEditable isolation of links
-        // before we apply the unlink, otherwise the command is not performed
-        // because the content editable root is the link
         const closestEl = closestElement(sel.focusNode, 'a');
-        if (closestEl && closestEl.getAttribute('contenteditable') === 'true') {
-            editor._activateContenteditable();
+        if (closestEl) {
+            // Remove the class otherwise Firefox transforms the link in a span.
+            closestEl.removeAttribute('class');
+            // Remove the contentEditable isolation of links before unlinking,
+            // otherwise the command fails since the link is the editable root.
+            if (closestEl.getAttribute('contenteditable') === 'true') {
+                editor._activateContenteditable();
+            }
         }
         if (sel.isCollapsed) {
             const cr = preserveCursor(editor.document);

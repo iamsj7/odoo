@@ -333,7 +333,7 @@ export class ListRenderer extends Component {
     }
 
     get canResequenceRows() {
-        if (!this.props.list.canResequence()) {
+        if (!this.props.list.canResequence() || this.props.readonly) {
             return false;
         }
         const orderBy = this.props.list.orderBy;
@@ -1770,6 +1770,20 @@ export class ListRenderer extends Component {
      */
     sortStart({ element }) {
         element.classList.add("o_dragged");
+        const table = this.tableRef.el;
+        const headers = [...table.querySelectorAll("thead th")];
+        const cells = [...element.querySelectorAll("td")];
+        let headerIndex = 0;
+        for (const cell of cells) {
+            let width = 0;
+            for (let i = 0; i < cell.colSpan; i++) {
+                const header = headers[headerIndex + i];
+                const style = getComputedStyle(header);
+                width += parseFloat(style.width);
+            }
+            cell.style.width = `${width}px`;
+            headerIndex += cell.colSpan;
+        }
     }
 
     /**
@@ -1779,6 +1793,9 @@ export class ListRenderer extends Component {
      */
     sortStop({ element }) {
         element.classList.remove("o_dragged");
+        for (const cell of element.querySelectorAll("td")) {
+            cell.style.width = null;
+        }
     }
 
     ignoreEventInSelectionMode(ev) {
@@ -1818,6 +1835,7 @@ ListRenderer.props = [
     "editable?",
     "noContentHelp?",
     "nestedKeyOptionalFieldsData?",
+    "readonly?",
 ];
 ListRenderer.defaultProps = { hasSelectors: false, cycleOnTab: true };
 
